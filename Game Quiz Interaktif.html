@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Master 4000 - Quiz Interaktif</title>
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Animasi Kustom */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .animate-slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .animate-pulse-custom {
+            animation: pulse 2s infinite;
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-bounce-slow {
+            animation: bounce 2s infinite;
+        }
+        
+        .shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite linear;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #4f46e5, #7c3aed);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #4338ca, #6d28d9);
+        }
+        
+        /* Selection Color */
+        ::selection {
+            background-color: rgba(79, 70, 229, 0.3);
+            color: #fff;
+        }
+        
+        /* Smooth Transitions */
+        .transition-all-custom {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Card Hover Effect */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Button Press Effect */
+        .btn-press:active {
+            transform: scale(0.95);
+        }
+        
+        /* Glow Effect */
+        .glow {
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(45deg, #4f46e5, #7c3aed, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: shimmer 3s infinite linear;
+        }
+        
+        /* Confetti Effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            top: 0;
+            opacity: 0;
+        }
+        
+        /* Progress Bar Animation */
+        .progress-bar-animate {
+            transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        /* Correct/Wrong Answer Effects */
+        .correct-answer {
+            animation: correctPulse 0.5s ease;
+        }
+        
+        .wrong-answer {
+            animation: wrongShake 0.5s ease;
+        }
+        
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Loading Animation */
+        .loading-dots:after {
+            content: ' .';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: ' .'; }
+            40% { content: ' ..'; }
+            60% { content: ' ...'; }
+            80%, 100% { content: ' ....'; }
+        }
+        
+        /* Glass Morphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen">
+    <!-- Game Container -->
+    <div id="app" class="min-h-screen">
+        <!-- Loading Screen -->
+        <div id="loadingScreen" class="fixed inset-0 bg-gradient-to-br from-indigo-600 to-purple-600 flex flex-col items-center justify-center z-50 transition-opacity duration-500">
+            <div class="text-center space-y-8">
+                <div class="relative">
+                    <div class="w-32 h-32 mx-auto relative">
+                        <div class="absolute inset-0 bg-white/20 rounded-full animate-ping"></div>
+                        <div class="absolute inset-4 bg-white/30 rounded-full animate-pulse"></div>
+                        <div class="absolute inset-8 bg-white rounded-full flex items-center justify-center">
+                            <i class="fas fa-brain text-4xl text-indigo-600 animate-bounce-slow"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <h1 class="text-4xl font-bold text-white animate-pulse-custom">Science Master 4000</h1>
+                    <div class="w-64 h-2 bg-white/30 rounded-full overflow-hidden mx-auto">
+                        <div id="loadingBar" class="h-full bg-gradient-to-r from-yellow-400 to-pink-500 rounded-full w-0 transition-all duration-1000"></div>
+                    </div>
+                    <p class="text-white/80 text-lg" id="loadingText">Menyiapkan game quiz...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Home Screen -->
+        <div id="homeScreen" class="hidden animate-fade-in">
+            <!-- Hero Section -->
+            <div class="relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10"></div>
+                <div class="relative container mx-auto px-4 py-12">
+                    <div class="text-center space-y-6">
+                        <div class="relative inline-block">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-3xl blur-xl opacity-50 animate-pulse-custom"></div>
+                            <img 
+                                src="https://mgx-backend-cdn.metadl.com/generate/images/861790/2025-12-27/e93de823-a931-40be-a1a8-9ee462a71039.png"
+                                alt="Quiz Banner"
+                                class="relative w-full max-w-4xl mx-auto rounded-3xl shadow-2xl border-4 border-white"
+                            />
+                        </div>
+                        <h1 class="text-6xl font-extrabold gradient-text">
+                            Game Quiz Interaktif
+                        </h1>
+                        <p class="text-2xl text-gray-700 font-semibold">
+                            4000 Soal Pilihan Ganda - Matematika, Fisika, Kimia, Biologi
+                        </p>
+                        <p class="text-lg text-gray-600">
+                            Uji pengetahuanmu dan pelajari penjelasan lengkap setiap jawaban!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Grid -->
+            <div class="container mx-auto px-4 py-12">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800">
+                    Pilih Kategori
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+                    <!-- Matematika -->
+                    <div class="card-hover group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-xl border-2 border-blue-100 hover:border-blue-300 transition-all-custom" onclick="startGame('matematika')">
+                        <div class="relative h-48 overflow-hidden">
+                            <img 
+                                src="https://mgx-backend-cdn.metadl.com/generate/images/861790/2025-12-27/2039cf37-2c56-4f26-a88c-30ed26aabddf.png"
+                                alt="Matematika"
+                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-blue-500/60 to-blue-600/60 opacity-70 group-hover:opacity-80 transition-opacity"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="bg-blue-500 p-6 rounded-full shadow-lg transform transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
+                                    <i class="fas fa-calculator text-white text-3xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">
+                                Matematika
+                            </h3>
+                            <p class="text-gray-600 mb-4">1000 Soal Tersedia</p>
+                            <button class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                                Mulai Quiz
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Fisika -->
+                    <div class="card-hover group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-xl border-2 border-purple-100 hover:border-purple-300 transition-all-custom" onclick="startGame('fisika')">
+                        <div class="relative h-48 overflow-hidden">
+                            <img 
+                                src="https://mgx-backend-cdn.metadl.com/generate/images/861790/2025-12-27/e6542bcd-0c11-4361-99c2-ed3657c87dd8.png"
+                                alt="Fisika"
+                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-purple-500/60 to-purple-600/60 opacity-70 group-hover:opacity-80 transition-opacity"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="bg-purple-500 p-6 rounded-full shadow-lg transform transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
+                                    <i class="fas fa-atom text-white text-3xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">
+                                Fisika
+                            </h3>
+                            <p class="text-gray-600 mb-4">1000 Soal Tersedia</p>
+                            <button class="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                                Mulai Quiz
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Kimia -->
+                    <div class="card-hover group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-xl border-2 border-amber-100 hover:border-amber-300 transition-all-custom" onclick="startGame('kimia')">
+                        <div class="relative h-48 overflow-hidden">
+                            <img 
+                                src="https://mgx-backend-cdn.metadl.com/generate/images/861790/2025-12-27/16216c0d-8c06-4876-9350-cee5f7a51dff.png"
+                                alt="Kimia"
+                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-amber-500/60 to-amber-600/60 opacity-70 group-hover:opacity-80 transition-opacity"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="bg-amber-500 p-6 rounded-full shadow-lg transform transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
+                                    <i class="fas fa-flask text-white text-3xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">
+                                Kimia
+                            </h3>
+                            <p class="text-gray-600 mb-4">1000 Soal Tersedia</p>
+                            <button class="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                                Mulai Quiz
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Biologi -->
+                    <div class="card-hover group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-xl border-2 border-green-100 hover:border-green-300 transition-all-custom" onclick="startGame('biologi')">
+                        <div class="relative h-48 overflow-hidden">
+                            <img 
+                                src="https://mgx-backend-cdn.metadl.com/generate/images/861790/2025-12-27/1f3aa2fc-cc2e-4505-b778-4af1882963cb.png"
+                                alt="Biologi"
+                                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-green-500/60 to-green-600/60 opacity-70 group-hover:opacity-80 transition-opacity"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="bg-green-500 p-6 rounded-full shadow-lg transform transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
+                                    <i class="fas fa-dna text-white text-3xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 text-center">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">
+                                Biologi
+                            </h3>
+                            <p class="text-gray-600 mb-4">1000 Soal Tersedia</p>
+                            <button class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                                Mulai Quiz
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Creator Info -->
+            <div class="container mx-auto px-4 py-12">
+                <div class="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl border-2 border-indigo-200 p-8">
+                    <h3 class="text-3xl font-bold text-center mb-6 gradient-text">
+                        Informasi Pembuat
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-center space-x-3 text-lg">
+                            <span class="font-semibold text-gray-700">Nama:</span>
+                            <span class="text-gray-900 font-bold">Reski Ardiansyah</span>
+                        </div>
+                        <div class="flex items-center justify-center space-x-3 text-lg">
+                            <i class="fas fa-envelope text-indigo-600"></i>
+                            <span class="text-gray-700">ar0236879@gmail.com</span>
+                        </div>
+                        <div class="flex items-center justify-center space-x-3 text-lg">
+                            <i class="fab fa-instagram text-pink-600"></i>
+                            <span class="text-gray-700">@ikky05__</span>
+                        </div>
+                        <div class="flex items-center justify-center space-x-3 text-lg">
+                            <i class="fab fa-whatsapp text-green-600"></i>
+                            <span class="text-gray-700">085657398446</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center py-8 text-gray-600">
+                <p class="text-sm">© 2024 Game Quiz Interaktif - Dibuat oleh Reski Ardiansyah</p>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quizScreen" class="hidden min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+            <!-- Header -->
+            <div class="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b shadow-sm">
+                <div class="container mx-auto px-4 py-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <button onclick="goHome()" class="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50 transition-all-custom btn-press">
+                                <i class="fas fa-home text-gray-700"></i>
+                                <span class="text-gray-700 font-medium">Beranda</span>
+                            </button>
+                            <h1 id="quizCategory" class="text-2xl font-bold gradient-text">
+                                Matematika
+                            </h1>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="text-sm font-medium text-gray-600">
+                                Soal: <span id="currentQuestionNumber">1</span>/1000
+                            </div>
+                            <button onclick="resetQuiz()" class="flex items-center space-x-2 bg-white border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50 transition-all-custom btn-press">
+                                <i class="fas fa-redo text-gray-700"></i>
+                                <span class="text-gray-700 font-medium">Reset</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="container mx-auto px-4 py-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Sidebar - Stats -->
+                    <div class="lg:col-span-1 space-y-6">
+                        <!-- Stats Panel -->
+                        <div class="bg-white rounded-2xl shadow-xl p-6 border-2 border-gray-100">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
+                                <i class="fas fa-chart-bar text-indigo-600"></i>
+                                <span>Statistik</span>
+                            </h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-indigo-50 p-4 rounded-xl text-center">
+                                    <div id="scoreValue" class="text-3xl font-bold text-indigo-600">0</div>
+                                    <div class="text-sm text-gray-600 mt-1">Skor</div>
+                                </div>
+                                <div class="bg-green-50 p-4 rounded-xl text-center">
+                                    <div id="correctValue" class="text-3xl font-bold text-green-600">0</div>
+                                    <div class="text-sm text-gray-600 mt-1">Benar</div>
+                                </div>
+                                <div class="bg-blue-50 p-4 rounded-xl text-center">
+                                    <div id="accuracyValue" class="text-3xl font-bold text-blue-600">0%</div>
+                                    <div class="text-sm text-gray-600 mt-1">Akurasi</div>
+                                </div>
+                                <div class="bg-yellow-50 p-4 rounded-xl text-center">
+                                    <div id="streakValue" class="text-3xl font-bold text-yellow-600">0</div>
+                                    <div class="text-sm text-gray-600 mt-1">Streak</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timer -->
+                        <div class="bg-white rounded-2xl shadow-xl p-6 border-2 border-gray-100">
+                            <div class="flex justify-between text-sm text-gray-600 mb-2">
+                                <span class="font-medium">Waktu Tersisa</span>
+                                <span id="timerValue" class="font-bold">30 detik</span>
+                            </div>
+                            <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                                <div id="timerBar" class="h-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full transition-all duration-1000"></div>
+                            </div>
+                        </div>
+
+                        <!-- Difficulty -->
+                        <div class="bg-white rounded-2xl shadow-xl p-6 border-2 border-gray-100">
+                            <h3 class="font-semibold text-gray-700 mb-3 flex items-center space-x-2">
+                                <i class="fas fa-chart-line text-indigo-600"></i>
+                                <span>Level Kesulitan</span>
+                            </h3>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Soal Saat Ini:</span>
+                                <span id="difficultyBadge" class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                    Mudah
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Progress -->
+                        <div class="bg-white rounded-2xl shadow-xl p-6 border-2 border-gray-100">
+                            <h3 class="font-semibold text-gray-700 mb-3 flex items-center space-x-2">
+                                <i class="fas fa-tasks text-indigo-600"></i>
+                                <span>Progress</span>
+                            </h3>
+                            <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-2">
+                                <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full progress-bar-animate w-0"></div>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span id="progressText">0%</span>
+                                <span id="progressNumbers">0/1000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Quiz Area -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-2xl shadow-xl border-2 border-gray-200 p-8">
+                            <!-- Question Card -->
+                            <div id="questionCard" class="bg-gradient-to-r from-indigo-50 to-purple-50 p-8 rounded-2xl border border-indigo-100 mb-8 animate-slide-in">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                                        <span id="questionNumberDisplay">1</span>
+                                    </div>
+                                    <p id="questionText" class="text-2xl font-medium text-gray-800 leading-relaxed">
+                                        Memuat soal...
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Options Grid -->
+                            <div id="optionsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                                <!-- Options will be loaded here -->
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                                <button id="checkButton" onclick="checkAnswer()" disabled class="flex-1 py-4 px-6 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 btn-press">
+                                    <i class="fas fa-check-circle mr-2"></i>
+                                    Periksa Jawaban
+                                </button>
+                                <button id="nextButton" onclick="nextQuestion()" class="hidden flex-1 py-4 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 btn-press">
+                                    <i class="fas fa-arrow-right mr-2"></i>
+                                    Soal Berikutnya
+                                </button>
+                            </div>
+
+                            <!-- Explanation -->
+                            <div id="explanationBox" class="hidden animate-fade-in">
+                                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border-2 border-blue-200">
+                                    <div class="flex items-start space-x-4">
+                                        <div id="resultIcon" class="flex-shrink-0 p-3 rounded-xl">
+                                            <i class="fas fa-lightbulb text-2xl"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 id="resultTitle" class="font-bold text-xl mb-2">
+                                                Penjelasan Jawaban
+                                            </h4>
+                                            <p id="explanationText" class="text-gray-700 text-lg">
+                                                Penjelasan akan muncul di sini
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-12 border-t pt-8">
+                <div class="container mx-auto px-4 text-center text-gray-600">
+                    <p class="text-sm">
+                        © 2024 Game Quiz Interaktif - Dibuat oleh Reski Ardiansyah
+                    </p>
+                    <div class="flex justify-center space-x-6 mt-4">
+                        <a href="mailto:ar0236879@gmail.com" class="text-sm hover:text-indigo-600 transition-colors">
+                            <i class="fas fa-envelope mr-1"></i> Email
+                        </a>
+                        <a href="https://wa.me/6285657398446" target="_blank" class="text-sm hover:text-green-600 transition-colors">
+                            <i class="fab fa-whatsapp mr-1"></i> WhatsApp
+                        </a>
+                        <a href="https://instagram.com/ikky05__" target="_blank" class="text-sm hover:text-pink-600 transition-colors">
+                            <i class="fab fa-instagram mr-1"></i> Instagram
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="resultScreen" class="hidden min-h-screen flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-8 border-8 border-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-fade-in">
+                <div class="text-center space-y-6">
+                    <div class="relative">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-yellow-400 via-pink-500 to-indigo-500 rounded-full blur-2xl opacity-30"></div>
+                        <div class="relative bg-gradient-to-r from-indigo-600 to-purple-600 w-32 h-32 rounded-full flex items-center justify-center mx-auto">
+                            <i class="fas fa-trophy text-white text-5xl"></i>
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-4xl font-bold gradient-text">Quiz Selesai!</h2>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-indigo-50 p-4 rounded-xl">
+                            <div class="text-3xl font-bold text-indigo-600" id="finalScore">0</div>
+                            <div class="text-sm text-gray-600">Skor Akhir</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-xl">
+                            <div class="text-3xl font-bold text-green-600" id="finalCorrect">0</div>
+                            <div class="text-sm text-gray-600">Jawaban Benar</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-xl">
+                            <div class="text-3xl font-bold text-blue-600" id="finalAccuracy">0%</div>
+                            <div class="text-sm text-gray-600">Akurasi</div>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-xl">
+                            <div class="text-3xl font-bold text-yellow-600" id="finalTime">0s</div>
+                            <div class="text-sm text-gray-600">Waktu</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <button onclick="goHome()" class="w-full py-4 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 btn-press">
+                            <i class="fas fa-home mr-2"></i>
+                            Kembali ke Beranda
+                        </button>
+                        <button onclick="restartQuiz()" class="w-full py-4 px-6 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 btn-press">
+                            <i class="fas fa-redo mr-2"></i>
+                            Main Lagi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // GAME STATE VARIABLES
+        // ============================================
+        let currentCategory = 'matematika';
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let correctCount = 0;
+        let totalAnswered = 0;
+        let currentStreak = 0;
+        let selectedOption = null;
+        let isAnswered = false;
+        let currentQuestion = null;
+        let timer = 30;
+        let timerInterval = null;
+        let totalTime = 0;
+        let questionsAnswered = 0;
+
+        // ============================================
+        // QUESTION GENERATORS
+        // ============================================
+        
+        function generateMathQuestion(id) {
+            const types = ['aljabar', 'geometri', 'aritmatika', 'trigonometri'];
+            const type = types[id % types.length];
+            
+            let question, answer, explanation, difficulty;
+            const baseNum = (id * 13) % 50 + 1;
+            const secondNum = (id * 7) % 50 + 1;
+            
+            switch(type) {
+                case 'aljabar':
+                    question = `Jika x + ${baseNum} = ${secondNum}, maka nilai x adalah?`;
+                    answer = secondNum - baseNum;
+                    explanation = `x = ${secondNum} - ${baseNum} = ${answer}`;
+                    difficulty = id % 10 === 0 ? 'hard' : id % 5 === 0 ? 'medium' : 'easy';
+                    break;
+                    
+                case 'geometri':
+                    const radius = (id % 10) + 1;
+                    question = `Luas lingkaran dengan jari-jari ${radius} cm adalah? (π = 3.14)`;
+                    answer = (3.14 * radius * radius).toFixed(2);
+                    explanation = `Luas = π × r² = 3.14 × ${radius}² = ${answer} cm²`;
+                    difficulty = id % 7 === 0 ? 'hard' : id % 3 === 0 ? 'medium' : 'easy';
+                    break;
+                    
+                case 'aritmatika':
+                    const ops = ['+', '-', '×', '÷'];
+                    const op = ops[id % ops.length];
+                    
+                    if (op === '+') {
+                        question = `${baseNum} + ${secondNum} = ?`;
+                        answer = baseNum + secondNum;
+                    } else if (op === '-') {
+                        question = `${Math.max(baseNum, secondNum)} - ${Math.min(baseNum, secondNum)} = ?`;
+                        answer = Math.abs(baseNum - secondNum);
+                    } else if (op === '×') {
+                        question = `${baseNum} × ${secondNum} = ?`;
+                        answer = baseNum * secondNum;
+                    } else {
+                        const dividend = baseNum * secondNum;
+                        question = `${dividend} ÷ ${secondNum} = ?`;
+                        answer = baseNum;
+                    }
+                    explanation = `Hasil dari ${question.replace('?', '')} = ${answer}`;
+                    difficulty = op === '÷' ? 'medium' : 'easy';
+                    break;
+                    
+                default: // trigonometri
+                    const angles = [0, 30, 45, 60, 90];
+                    const angle = angles[id % angles.length];
+                    const funcs = ['sin', 'cos', 'tan'];
+                    const func = funcs[id % funcs.length];
+                    
+                    question = `Nilai dari ${func} ${angle}° adalah?`;
+                    
+                    switch(func + angle) {
+                        case 'sin0': answer = '0'; break;
+                        case 'sin30': answer = '1/2'; break;
+                        case 'sin45': answer = '√2/2'; break;
+                        case 'sin60': answer = '√3/2'; break;
+                        case 'sin90': answer = '1'; break;
+                        case 'cos0': answer = '1'; break;
+                        case 'cos30': answer = '√3/2'; break;
+                        case 'cos45': answer = '√2/2'; break;
+                        case 'cos60': answer = '1/2'; break;
+                        case 'cos90': answer = '0'; break;
+                        case 'tan0': answer = '0'; break;
+                        case 'tan30': answer = '√3/3'; break;
+                        case 'tan45': answer = '1'; break;
+                        case 'tan60': answer = '√3'; break;
+                        case 'tan90': answer = '∞'; break;
+                        default: answer = '0';
+                    }
+                    explanation = `Nilai ${func} ${angle}° = ${answer}`;
+                    difficulty = angle === 90 ? 'hard' : angle >= 60 ? 'medium' : 'easy';
+            }
+            
+            const options = generateOptions(answer, 'matematika');
+            
+            return {
+                question: question,
+                options: options,
+                correct: options.indexOf(answer.toString()),
+                explanation: explanation,
+                difficulty: difficulty
+            };
+        }
+
+        function generatePhysicsQuestion(id) {
+            const topics = [
+                { topic: 'mekanika', question: "Hukum Newton ke-2 menyatakan bahwa...", answer: "F = m × a" },
+                { topic: 'listrik', question: "Satuan kuat arus listrik adalah...", answer: "Ampere" },
+                { topic: 'optik', question: "Cahaya merambat dengan kecepatan...", answer: "3 × 10^8 m/s" },
+                { topic: 'energi', question: "Energi kinetik dirumuskan sebagai...", answer: "½ mv²" },
+                { topic: 'gerak', question: "Percepatan adalah turunan dari...", answer: "Kecepatan" },
+                { topic: 'gaya', question: "Gaya tarik menarik antara dua massa adalah...", answer: "Gaya gravitasi" }
+            ];
+            
+            const topic = topics[id % topics.length];
+            const options = generateOptions(topic.answer, 'fisika');
+            const difficulty = id % 10 === 0 ? 'hard' : id % 4 === 0 ? 'medium' : 'easy';
+            
+            const explanations = {
+                'mekanika': "Hukum II Newton: Gaya (F) sama dengan massa (m) dikali percepatan (a).",
+                'listrik': "Kuat arus listrik diukur dalam satuan Ampere (A), sesuai nama fisikawan André-Marie Ampère.",
+                'optik': "Cahaya merambat dalam vakum dengan kecepatan 299.792.458 m/s ≈ 3 × 10^8 m/s.",
+                'energi': "Energi kinetik = ½ × massa × kecepatan². Satuan energi adalah Joule.",
+                'gerak': "Percepatan adalah perubahan kecepatan terhadap waktu: a = dv/dt.",
+                'gaya': "Hukum gravitasi Newton: F = G × (m₁×m₂)/r²"
+            };
+            
+            return {
+                question: topic.question,
+                options: options,
+                correct: options.indexOf(topic.answer),
+                explanation: explanations[topic.topic] || "Penjelasan untuk jawaban ini.",
+                difficulty: difficulty
+            };
+        }
+
+        function generateChemistryQuestion(id) {
+            const topics = [
+                { question: "Unsur dengan simbol Na adalah...", answer: "Natrium" },
+                { question: "Reaksi yang melepaskan kalor disebut...", answer: "Eksoterm" },
+                { question: "Rumus kimia air adalah...", answer: "H₂O" },
+                { question: "Hidrokarbon paling sederhana adalah...", answer: "Metana" },
+                { question: "pH larutan netral adalah...", answer: "7" },
+                { question: "Atom terdiri dari proton, neutron, dan...", answer: "Elektron" }
+            ];
+            
+            const topic = topics[id % topics.length];
+            const options = generateOptions(topic.answer, 'kimia');
+            const difficulty = id % 8 === 0 ? 'hard' : id % 3 === 0 ? 'medium' : 'easy';
+            
+            const explanations = {
+                "Natrium": "Na adalah simbol untuk Natrium (dari bahasa Latin: Natrium), logam alkali.",
+                "Eksoterm": "Reaksi eksoterm melepaskan energi dalam bentuk kalor ke lingkungan.",
+                "H₂O": "Air terdiri dari 2 atom Hidrogen dan 1 atom Oksigen.",
+                "Metana": "Metana (CH₄) adalah hidrokarbon paling sederhana, komponen utama gas alam.",
+                "7": "pH 7 menunjukkan larutan netral, dengan konsentrasi H⁺ dan OH⁻ sama.",
+                "Elektron": "Elektron bermuatan negatif, mengorbit inti atom."
+            };
+            
+            return {
+                question: topic.question,
+                options: options,
+                correct: options.indexOf(topic.answer),
+                explanation: explanations[topic.answer] || "Penjelasan kimia untuk jawaban ini.",
+                difficulty: difficulty
+            };
+        }
+
+        function generateBiologyQuestion(id) {
+            const topics = [
+                { question: "Organel tempat respirasi seluler adalah...", answer: "Mitokondria" },
+                { question: "Pembawa sifat keturunan adalah...", answer: "DNA" },
+                { question: "Proses fotosintesis terjadi di...", answer: "Kloroplas" },
+                { question: "Jantung manusia memiliki... bilik", answer: "4" },
+                { question: "Sistem kekebalan tubuh melibatkan sel...", answer: "Limfosit" },
+                { question: "Proses pembuatan makanan oleh tumbuhan disebut...", answer: "Fotosintesis" }
+            ];
+            
+            const topic = topics[id % topics.length];
+            const options = generateOptions(topic.answer, 'biologi');
+            const difficulty = id % 9 === 0 ? 'hard' : id % 4 === 0 ? 'medium' : 'easy';
+            
+            const explanations = {
+                "Mitokondria": "Mitokondria adalah pusat respirasi seluler, menghasilkan energi (ATP).",
+                "DNA": "DNA (Asam Deoksiribonukleat) membawa informasi genetik makhluk hidup.",
+                "Kloroplas": "Kloroplas mengandung klorofil untuk fotosintesis pada tumbuhan.",
+                "4": "Jantung manusia memiliki 4 bilik: 2 atrium (serambi) dan 2 ventrikel (bilik).",
+                "Limfosit": "Limfosit adalah sel darah putih yang berperan dalam sistem imun.",
+                "Fotosintesis": "Fotosintesis: 6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂ (dengan bantuan cahaya)."
+            };
+            
+            return {
+                question: topic.question,
+                options: options,
+                correct: options.indexOf(topic.answer),
+                explanation: explanations[topic.answer] || "Penjelasan biologi untuk jawaban ini.",
+                difficulty: difficulty
+            };
+        }
+
+        function generateOptions(correctAnswer, type) {
+            const options = [correctAnswer.toString()];
+            
+            while (options.length < 4) {
+                let wrongAnswer;
+                
+                if (!isNaN(correctAnswer) && correctAnswer !== '') {
+                    const variance = Math.floor(Math.random() * 10) + 1;
+                    const direction = Math.random() > 0.5 ? 1 : -1;
+                    wrongAnswer = Number(correctAnswer) + (direction * variance);
+                } else {
+                    const wrongOptions = {
+                        matematika: ['0', '1', '-1', '∞', 'tidak terdefinisi'],
+                        fisika: ['Joule', 'Newton', 'Watt', 'Volt', 'Ohm'],
+                        kimia: ['Kalium', 'Magnesium', 'Karbon', 'Oksigen', 'Hidrogen'],
+                        biologi: ['Kloroplas', 'Nukleus', 'Ribosom', 'Lisosom', 'Retikulum']
+                    };
+                    
+                    const categoryOptions = wrongOptions[type] || wrongOptions.matematika;
+                    const filtered = categoryOptions.filter(opt => opt !== correctAnswer);
+                    wrongAnswer = filtered[Math.floor(Math.random() * filtered.length)];
+                }
+                
+                if (!options.includes(wrongAnswer.toString())) {
+                    options.push(wrongAnswer.toString());
+                }
+            }
+            
+            return shuffleArray(options);
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // ============================================
+        // GAME FUNCTIONS
+        // ============================================
+        
+        function startGame(category) {
+            currentCategory = category;
+            currentQuestionIndex = 0;
+            score = 0;
+            correctCount = 0;
+            totalAnswered = 0;
+            currentStreak = 0;
+            selectedOption = null;
+            isAnswered = false;
+            totalTime = 0;
+            questionsAnswered = 0;
+            
+            // Update UI
+            document.getElementById('homeScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            
+            // Update category name
+            const categoryNames = {
+                'matematika': 'Matematika',
+                'fisika': 'Fisika',
+                'kimia': 'Kimia',
+                'biologi': 'Biologi'
+            };
+            
+            document.getElementById('quizCategory').textContent = categoryNames[category];
+            
+            // Load first question
+            loadQuestion();
+            updateStats();
+            startTimer();
+        }
+
+        function loadQuestion() {
+            currentQuestionIndex++;
+            selectedOption = null;
+            isAnswered = false;
+            
+            // Generate question based on category
+            let question;
+            switch(currentCategory) {
+                case 'matematika':
+                    question = generateMathQuestion(currentQuestionIndex);
+                    break;
+                case 'fisika':
+                    question = generatePhysicsQuestion(currentQuestionIndex);
+                    break;
+                case 'kimia':
+                    question = generateChemistryQuestion(currentQuestionIndex);
+                    break;
+                case 'biologi':
+                    question = generateBiologyQuestion(currentQuestionIndex);
+                    break;
+                default:
+                    question = generateMathQuestion(currentQuestionIndex);
+            }
+            
+            currentQuestion = question;
+            
+            // Update UI
+            document.getElementById('questionNumberDisplay').textContent = currentQuestionIndex;
+            document.getElementById('currentQuestionNumber').textContent = currentQuestionIndex;
+            document.getElementById('questionText').textContent = question.question;
+            
+            // Update difficulty badge
+            const difficultyText = {
+                'easy': 'Mudah',
+                'medium': 'Sedang',
+                'hard': 'Sulit'
+            };
+            
+            const difficultyColors = {
+                'easy': 'bg-green-100 text-green-800',
+                'medium': 'bg-yellow-100 text-yellow-800',
+                'hard': 'bg-red-100 text-red-800'
+            };
+            
+            const badge = document.getElementById('difficultyBadge');
+            badge.textContent = difficultyText[question.difficulty];
+            badge.className = `px-3 py-1 rounded-full text-sm font-medium ${difficultyColors[question.difficulty]}`;
+            
+            // Load options
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+            
+            const optionLetters = ['A', 'B', 'C', 'D'];
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('button');
+                optionDiv.className = 'p-6 bg-white border-2 border-gray-200 rounded-xl text-left transition-all duration-200 hover:border-indigo-300 hover:bg-gray-50 hover:scale-[1.02] active:scale-[0.98] btn-press';
+                optionDiv.innerHTML = `
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center font-bold text-gray-700">
+                            ${optionLetters[index]}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-gray-800 font-medium text-lg leading-relaxed">${option}</p>
+                        </div>
+                    </div>
+                `;
+                optionDiv.onclick = () => selectOption(index);
+                optionsGrid.appendChild(optionDiv);
+            });
+            
+            // Reset buttons
+            document.getElementById('checkButton').disabled = true;
+            document.getElementById('checkButton').classList.remove('hidden');
+            document.getElementById('nextButton').classList.add('hidden');
+            
+            // Hide explanation
+            document.getElementById('explanationBox').classList.add('hidden');
+            
+            // Reset timer
+            timer = 30;
+            updateTimerDisplay();
+            
+            // Update progress
+            updateProgress();
+        }
+
+        function selectOption(index) {
+            if (isAnswered) return;
+            
+            // Remove previous selection
+            const options = document.querySelectorAll('#optionsGrid button');
+            options.forEach(opt => {
+                opt.classList.remove('border-indigo-500', 'bg-indigo-50');
+            });
+            
+            // Add selection to clicked option
+            options[index].classList.add('border-indigo-500', 'bg-indigo-50');
+            selectedOption = index;
+            
+            // Enable check button
+            document.getElementById('checkButton').disabled = false;
+        }
+
+        function checkAnswer() {
+            if (selectedOption === null || !currentQuestion || isAnswered) return;
+            
+            isAnswered = true;
+            totalAnswered++;
+            questionsAnswered++;
+            
+            const options = document.querySelectorAll('#optionsGrid button');
+            const correctIndex = currentQuestion.correct;
+            
+            // Highlight correct and incorrect answers
+            options.forEach((opt, index) => {
+                if (index === correctIndex) {
+                    opt.classList.remove('border-gray-200', 'border-indigo-500', 'bg-indigo-50');
+                    opt.classList.add('border-green-500', 'bg-green-50', 'correct-answer');
+                    opt.querySelector('div div').classList.add('bg-green-500', 'text-white');
+                } else if (index === selectedOption && index !== correctIndex) {
+                    opt.classList.remove('border-gray-200', 'border-indigo-500', 'bg-indigo-50');
+                    opt.classList.add('border-red-500', 'bg-red-50', 'wrong-answer');
+                    opt.querySelector('div div').classList.add('bg-red-500', 'text-white');
+                }
+            });
+            
+            // Update score
+            if (selectedOption === correctIndex) {
+                const points = currentQuestion.difficulty === 'easy' ? 10 : 
+                             currentQuestion.difficulty === 'medium' ? 20 : 30;
+                score += points;
+                correctCount++;
+                currentStreak++;
+                
+                // Celebration effect
+                document.getElementById('questionCard').classList.add('correct-answer');
+                setTimeout(() => {
+                    document.getElementById('questionCard').classList.remove('correct-answer');
+                }, 500);
+            } else {
+                currentStreak = 0;
+            }
+            
+            // Update stats
+            updateStats();
+            
+            // Show explanation
+            document.getElementById('resultIcon').className = 'flex-shrink-0 p-3 rounded-xl';
+            document.getElementById('resultIcon').innerHTML = selectedOption === correctIndex 
+                ? '<i class="fas fa-check-circle text-2xl text-green-500"></i>' 
+                : '<i class="fas fa-times-circle text-2xl text-red-500"></i>';
+            
+            document.getElementById('resultTitle').textContent = selectedOption === correctIndex 
+                ? 'Jawaban Benar! 🎉' 
+                : 'Jawaban Salah ❌';
+            
+            document.getElementById('explanationText').textContent = currentQuestion.explanation;
+            document.getElementById('explanationBox').classList.remove('hidden');
+            
+            // Switch buttons
+            document.getElementById('checkButton').classList.add('hidden');
+            document.getElementById('nextButton').classList.remove('hidden');
+            
+            // Stop timer
+            clearInterval(timerInterval);
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex >= 1000) {
+                showResults();
+                return;
+            }
+            
+            loadQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timer = 30;
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timer--;
+                updateTimerDisplay();
+                
+                if (timer <= 0) {
+                    clearInterval(timerInterval);
+                    if (!isAnswered) {
+                        checkAnswer();
+                    }
+                }
+                
+                totalTime++;
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timerValue').textContent = `${timer} detik`;
+            const percentage = (timer / 30) * 100;
+            document.getElementById('timerBar').style.width = `${percentage}%`;
+            
+            // Change color based on time
+            if (timer > 15) {
+                document.getElementById('timerBar').className = 'h-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full transition-all duration-1000';
+            } else if (timer > 5) {
+                document.getElementById('timerBar').className = 'h-full bg-gradient-to-r from-yellow-500 to-red-500 rounded-full transition-all duration-1000';
+            } else {
+                document.getElementById('timerBar').className = 'h-full bg-gradient-to-r from-red-500 to-red-600 rounded-full transition-all duration-1000';
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('scoreValue').textContent = score;
+            document.getElementById('correctValue').textContent = correctCount;
+            
+            const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+            document.getElementById('accuracyValue').textContent = `${accuracy}%`;
+            
+            document.getElementById('streakValue').textContent = currentStreak;
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestionIndex / 1000) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `${progress.toFixed(1)}%`;
+            document.getElementById('progressNumbers').textContent = `${currentQuestionIndex}/1000`;
+        }
+
+        function resetQuiz() {
+            if (confirm('Apakah Anda yakin ingin mereset quiz? Semua progress akan hilang.')) {
+                currentQuestionIndex = 0;
+                score = 0;
+                correctCount = 0;
+                totalAnswered = 0;
+                currentStreak = 0;
+                selectedOption = null;
+                isAnswered = false;
+                totalTime = 0;
+                questionsAnswered = 0;
+                
+                clearInterval(timerInterval);
+                loadQuestion();
+                updateStats();
+            }
+        }
+
+        function goHome() {
+            clearInterval(timerInterval);
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.add('hidden');
+            document.getElementById('homeScreen').classList.remove('hidden');
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+            
+            const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+            
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('finalCorrect').textContent = correctCount;
+            document.getElementById('finalAccuracy').textContent = `${accuracy}%`;
+            document.getElementById('finalTime').textContent = `${totalTime} detik`;
+        }
+
+        function restartQuiz() {
+            document.getElementById('resultScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            
+            currentQuestionIndex = 0;
+            score = 0;
+            correctCount = 0;
+            totalAnswered = 0;
+            currentStreak = 0;
+            selectedOption = null;
+            isAnswered = false;
+            totalTime = 0;
+            questionsAnswered = 0;
+            
+            loadQuestion();
+            updateStats();
+            startTimer();
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        
+        function init() {
+            // Simulate loading
+            let progress = 0;
+            const loadingInterval = setInterval(() => {
+                progress += Math.random() * 20;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(loadingInterval);
+                    
+                    document.getElementById('loadingBar').style.width = '100%';
+                    document.getElementById('loadingText').textContent = 'Siap!';
+                    
+                    setTimeout(() => {
+                        document.getElementById('loadingScreen').style.opacity = '0';
+                        setTimeout(() => {
+                            document.getElementById('loadingScreen').style.display = 'none';
+                            document.getElementById('homeScreen').classList.remove('hidden');
+                            document.getElementById('homeScreen').classList.add('animate-fade-in');
+                        }, 500);
+                    }, 500);
+                } else {
+                    document.getElementById('loadingBar').style.width = `${progress}%`;
+                    document.getElementById('loadingText').textContent = 
+                        ['Menyiapkan soal...', 'Menyiapkan antarmuka...', 'Menyiapkan game...'][Math.floor(progress / 33)];
+                }
+            }, 50);
+            
+            // Initialize lucide icons
+            lucide.createIcons();
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                // Number keys 1-4 for options
+                if (e.key >= '1' && e.key <= '4') {
+                    const index = parseInt(e.key) - 1;
+                    const options = document.querySelectorAll('#optionsGrid button');
+                    if (index < options.length && !isAnswered) {
+                        selectOption(index);
+                    }
+                }
+                
+                // Enter to check/next
+                if (e.key === 'Enter') {
+                    if (!isAnswered && !document.getElementById('checkButton').disabled) {
+                        checkAnswer();
+                    } else if (isAnswered) {
+                        nextQuestion();
+                    }
+                }
+                
+                // Space for next
+                if (e.key === ' ' && isAnswered) {
+                    nextQuestion();
+                }
+                
+                // Escape for home
+                if (e.key === 'Escape') {
+                    if (document.getElementById('quizScreen').classList.contains('hidden')) {
+                        // Do nothing
+                    } else {
+                        goHome();
+                    }
+                }
+            });
+        }
+
+        // Start the game when page loads
+        window.onload = init;
+    </script>
+</body>
+</html>
